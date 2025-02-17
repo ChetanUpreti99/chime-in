@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
+import { ModelDefinition, MongooseModule } from '@nestjs/mongoose';
+import { DbMigrationService } from './db-migration.service';
+
 @Module({
   imports: [
     MongooseModule.forRootAsync({
@@ -11,6 +13,11 @@ import { MongooseModule } from '@nestjs/mongoose';
     }),
   ],
   controllers: [],
-  providers: [],
+  providers: [DbMigrationService],
 })
-export class DatabaseModule {}
+export class DatabaseModule {
+  // forFeature() method is used to define the models that will be used in the module.
+  static forFeature(models: ModelDefinition[]) {
+    return MongooseModule.forFeature(models);
+  }
+}
